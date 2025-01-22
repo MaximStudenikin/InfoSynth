@@ -1,0 +1,79 @@
+/* main-screen.css */
+#main-screen {
+  width: 90%;
+  max-width: 1200px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+#document-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#date-range-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+#date-range-container label {
+   margin: 0;
+}
+
+#date-range-container input[type="date"] {
+    padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+#articles-statistic {
+   text-align: center;
+   margin-bottom: 20px;
+  color: #555;
+}
+
+#articles-statistic p {
+   margin: 5px 0;
+}
+#most-viewed-container {
+margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+   border-radius: 4px;
+}
+#most-viewed-container h3{
+ text-align: center;
+  margin-bottom: 10px;
+}
+#most-viewed-content {
+  color: #555;
+}
+#inspection-video-container {
+    margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+#inspection-video-container h3{
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+#inspection-video-list li {
+   margin: 8px 0;
+      padding: 8px;
+   border-bottom: 1px solid #eee;
+    display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#inspection-video-list li:last-child {
+border-bottom: none;
+}
+.inspection-video-item{
+  background-color: #f9f9f9;
+}
