@@ -252,6 +252,7 @@ color: #0056b3;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  overflow-y: auto; /* Добавляем прокрутку по вертикали при необходимости */
 }
 
 #modal-content {
@@ -261,6 +262,8 @@ color: #0056b3;
   max-width: 600px;
   width: 90%;
    position: relative;
+  max-height: 90vh; /* Ограничиваем максимальную высоту модального окна */
+  overflow-y: auto; /* Добавляем прокрутку по вертикали, если контент выходит за границы */
 }
 .modal-header{
   display: flex;
