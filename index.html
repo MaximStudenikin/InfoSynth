@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализатор СМИ</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+    <header>
+        <h1>Анализатор СМИ</h1>
+    </header>
+    <main>
+        <div id="main-screen">
+            <h2 id="document-title">Аналитическая справка по публикациям в СМИ</h2>
+            <div id="date-range-container">
+                <label for="start-date">Дата начала:</label>
+                <input type="date" id="start-date">
+                <label for="end-date">Дата окончания:</label>
+                <input type="date" id="end-date">
+                <button id="update-header-btn">Обновить заголовок</button>
+            </div>
+               <div id="articles-statistic">
+                <p>Позитивных публикаций – 0</p>
+                <p>Негативных публикаций – 0</p>
+            </div>
+            <div id="most-viewed-container">
+                <h3>Самая охватываемая запись</h3>
+                <div id="most-viewed-content">
+                    <p>Нет данных</p>
+                </div>
+            </div>
+            <div id="inspection-video-container">
+                <h3>Сюжеты с участием инспекции:</h3>
+                <ul id="inspection-video-list"></ul>
+            </div>
+              <div class="article-lists">
+                    <div class="article-list-container">
+                         <h3>Все статьи</h3>
+                         <ul id="article-list">
+                                <!-- Статьи -->
+                          </ul>
+                   </div>
+                    <div class="article-list-container">
+                        <h3>Позитив</h3>
+                        <ul id="positive-list">
+                                 <!-- Статьи -->
+                          </ul>
+                    </div>
+                    <div class="article-list-container">
+                         <h3>Негатив</h3>
+                          <ul id="negative-list">
+                                   <!-- Статьи -->
+                           </ul>
+                      </div>
+               </div>
+             <div id="action-buttons">
+                <button id="add-article-btn">Добавить статью</button>
+                <button id="add-most-viewed-post-btn">Добавить самый охватываемый пост</button>
+                <button id="clear-data-btn">Очистить данные</button>
+                 <button id="generate-word-btn">
+                   <i class="fas fa-download"></i> Скачать аналитику
+               </button>
+            </div>
+            <div id="search-container">
+                <input type="text" id="search-input" placeholder="Поиск...">
+            </div>
+             <div id="filter-container">
+               <label for="filter-articles">Фильтр по типу источника:</label>
+                <select id="filter-articles">
+                    <option value="all">Все</option>
+                    <option value="social">Соцсети</option>
+                     <option value="video">Видео</option>
+                </select>
+            </div>
+        </div>
+    </main>
+    <div id="modal-overlay">
+        <div id="modal-content">
+            <!-- Содержимое модального окна -->
+        </div>
+    </div>
+    <script type="module" src="main.js"></script>
+</body>
+</html>
