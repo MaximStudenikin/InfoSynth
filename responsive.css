@@ -1,0 +1,45 @@
+/* responsive.css */
+/* Медиа-запросы для адаптации под разные разрешения */
+
+/* Для экранов с разрешением от 1024px до 1366px */
+@media (min-width: 1024px) and (max-width: 1366px) {
+  #main-screen {
+      width: 95%;
+  }
+
+  .article-lists {
+      flex-direction: row; /* Размещение списков в строку */
+  }
+  .article-list-container {
+      flex: 1;
+  }
+  #search-container input[type="text"] {
+    width: 150px;
+  }
+}
+
+/* Для экранов с разрешением от 1367px до 1600px */
+@media (min-width: 1367px) and (max-width: 1600px) {
+  #main-screen {
+      width: 80%;
+  }
+   .article-lists {
+      flex-direction: row;
+  }
+   .article-list-container {
+      flex: 1;
+  }
+}
+
+/* Для экранов с разрешением от 1601px до 1920px */
+@media (min-width: 1601px) and (max-width: 1920px) {
+  #main-screen {
+      width: 70%;
+  }
+    .article-lists {
+       flex-direction: row;
+  }
+    .article-list-container {
+      flex: 1;
+  }
+}
