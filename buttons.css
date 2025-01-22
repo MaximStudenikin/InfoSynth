@@ -1,0 +1,73 @@
+/* buttons.css */
+#update-header-btn {
+  background-color: #5cb85c;
+color: white;
+border: none;
+padding: 10px 15px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 14px;
+margin: 4px 2px;
+cursor: pointer;
+border-radius: 4px;
+transition: background-color 0.3s ease;
+}
+#update-header-btn:hover {
+background-color: #4cae4c;
+}
+#action-buttons {
+  display: flex;
+  justify-content: center;
+gap: 10px;
+margin-bottom: 20px;
+}
+#action-buttons button {
+background-color: #007bff;
+color: white;
+border: none;
+padding: 10px 15px;
+text-align: center;
+text-decoration: none;
+display: inline-block;
+font-size: 14px;
+margin: 4px 2px;
+cursor: pointer;
+border-radius: 4px;
+ transition: background-color 0.3s ease;
+}
+
+#action-buttons button:hover{
+background-color: #0056b3;
+}
+#action-buttons button i{
+margin-right: 5px;
+}
+.delete-btn {
+position: absolute;
+top: 5px;
+right: 5px;
+background: none;
+border: none;
+cursor: pointer;
+color: #dc3545;
+font-size: 18px;
+ transition: color 0.3s ease;
+}
+.delete-btn:hover {
+color: #c82333;
+}
+.edit-btn {
+position: absolute;
+top: 5px;
+right: 30px;
+background: none;
+border: none;
+cursor: pointer;
+color: #007bff;
+font-size: 18px;
+ transition: color 0.3s ease;
+}
+.edit-btn:hover {
+color: #0056b3;
+}
