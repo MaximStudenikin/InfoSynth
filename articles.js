@@ -31,7 +31,10 @@ export function updateArticleList() {
            const editBtn = document.createElement('button');
           editBtn.classList.add('edit-btn');
           editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-          editBtn.addEventListener('click', () => editArticle(article.id));
+           editBtn.addEventListener('click', () => {
+            console.log("Edit button clicked");
+            editArticle(article.id)
+        });
           li.appendChild(editBtn);
          inspectionVideoList.appendChild(li)
          return;
@@ -87,7 +90,10 @@ export function updateArticleList() {
             const editBtn = document.createElement('button');
           editBtn.classList.add('edit-btn');
           editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-          editBtn.addEventListener('click', () => editArticle(article.id));
+            editBtn.addEventListener('click', () => {
+            console.log("Edit button clicked");
+            editArticle(article.id)
+        });
           li.appendChild(editBtn);
 
 
@@ -147,12 +153,16 @@ export function updateArticleSentiment(id, sentiment) {
     }
 }
  export function editArticle(id) {
+    console.log("Attempting to edit article with id:", id);
+    console.log("Current articles array:", articles);
     const article = articles.find(article => article.id === id);
+     console.log("Found article:", article);
     if (article) {
-       createEditArticleModal(article);
+       createEditArticleModal(article.id);
     }
 }
  export function updateArticle(updatedArticle) {
+      console.log("updateArticle called with:", updatedArticle);
     const index = articles.findIndex(article => article.id === updatedArticle.id);
     if (index !== -1) {
         articles[index] = updatedArticle;
@@ -161,6 +171,7 @@ export function updateArticleSentiment(id, sentiment) {
            updateStatistic();
          updateMostViewed();
          filterArticles();
+           console.log("Article updated successfully:", articles[index])
     }
 }
 

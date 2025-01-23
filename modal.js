@@ -1,4 +1,4 @@
-import { addArticle, editArticle, updateArticleSentiment, articles } from "./articles.js";
+import { addArticle, editArticle, updateArticleSentiment, articles, updateArticle } from "./articles.js";
 import { updateArticleList, updateMostViewed} from "./articles.js";
 import { clearText, findAddresses } from "./utils.js";
 
@@ -283,12 +283,21 @@ export function createAddMostViewedPostModal() {
 }
 
 export function createEditArticleModal(articleId) {
+    console.log("createEditArticleModal called with id:", articleId);
      const modalOverlay = document.getElementById("modal-overlay");
-    const modalContent = document.getElementById("modal-content");
+      const modalContent = document.getElementById("modal-content");
+       console.log("Modal overlay element:", modalOverlay);
+       console.log("Modal content element:", modalContent);
     const article = articles.find(article => article.id === articleId);
 
     if (!article) {
         console.error("Article not found with id:", articleId);
+         modalContent.innerHTML = `<div class="modal-header"><h2>Ошибка</h2><span class="close-modal">&times;</span></div><div class="modal-body"><p>Статья с указанным ID не найдена.</p></div>`;
+         modalOverlay.style.display = "flex";
+          const closeModal = document.querySelector('.close-modal');
+         closeModal.addEventListener('click', () => {
+             modalOverlay.style.display = 'none';
+         });
         return;
     }
   modalContent.innerHTML = `
@@ -345,7 +354,8 @@ export function createEditArticleModal(articleId) {
             <button id="save-edit-article-btn" data-id="${articleId}">Сохранить</button>
         </div>
     `;
-     modalOverlay.style.display = "flex";
+    modalOverlay.style.display = "flex";
+     console.log("Modal overlay display style:", modalOverlay.style.display);
       const closeModal = document.querySelector('.close-modal');
     const saveEditArticleBtn = document.getElementById('save-edit-article-btn');
        const editArticleTypeNewsBtn = document.getElementById('edit-article-type-news');
@@ -405,6 +415,20 @@ export function createEditArticleModal(articleId) {
          const social = document.getElementById('edit-article-social').value;
         const addresses = addressesInput.split('\n').map(addr => addr.trim()).filter(addr => addr);
          const speaker = speakerInput.split('\n').map(sp => sp.trim()).filter(sp => sp);
+        console.log("Data before update:", {
+            source,
+             date,
+            title,
+            text,
+            views,
+            url,
+            addresses,
+            speaker,
+            startTime,
+             isInspection,
+            isMostViewed,
+            social
+         });
 
         const updatedArticle = {
             id: articleId,
@@ -423,10 +447,11 @@ export function createEditArticleModal(articleId) {
             sentiment: editArticleSentiment,
             social: social
         };
-
-        editArticle(updatedArticle);
+         console.log("Updated article:", updatedArticle)
+        updateArticle(updatedArticle); // Исправленный вызов
+         console.log("editArticle called with:", updatedArticle);
          modalOverlay.style.display = 'none';
-       updateMostViewed();
+        updateMostViewed();
         updateArticleList();
     }
 }
