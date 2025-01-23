@@ -1,12 +1,10 @@
 import {articles} from "./articles.js";
 
 export function updateStatistic() {
-    const positiveCount = articles.filter(article => article.sentiment === 'positive').length;
-    const negativeCount = articles.filter(article => article.sentiment === 'negative').length;
-
-    const articlesStatistic = document.getElementById('articles-statistic');
-    articlesStatistic.innerHTML = `
-        <p>Позитивных публикаций – ${positiveCount}</p>
-        <p>Негативных публикаций – ${negativeCount}</p>
-    `;
+    const positiveCount = document.querySelector('#articles-statistic > p:first-child');
+    const negativeCount = document.querySelector('#articles-statistic > p:last-child');
+    const positiveArticles = articles.filter(article => article.sentiment === 'positive').length;
+    const negativeArticles = articles.filter(article => article.sentiment === 'negative').length;
+    positiveCount.textContent = `Позитивных публикаций – ${positiveArticles}`;
+    negativeCount.textContent = `Негативных публикаций – ${negativeArticles}`;
 }
