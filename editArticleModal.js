@@ -1,4 +1,4 @@
-import { updateArticle, editArticle } from "./articles.js";
+import { updateArticle, editArticle, articles } from "./articles.js";
 import { clearText } from "./utils.js";
 import { closeModal, handleTypeButtons, handleSentimentButtons } from "./modalUtils.js";
 
@@ -32,11 +32,11 @@ export async function createEditArticleModal(articleId) {
       modalOverlay.style.display = "flex";
       const closeBtn = modalContent.querySelector('.close-modal');
      const saveBtn = modalContent.querySelector('#save-edit-article-btn');
-    const typeButtons = modalContent.querySelectorAll('[id^="edit-article-type-"]');
-   const sentimentButtons = modalContent.querySelectorAll('[id^="edit-article-sentiment-"]');
+     const typeButtons = modalContent.querySelectorAll('[id^="edit-article-type-"]');
+      const sentimentButtons = modalContent.querySelectorAll('[id^="edit-article-sentiment-"]');
+
       let editArticleType = article.type;
     let editArticleSentiment = article.sentiment;
-
     closeModal(modalOverlay, closeBtn);
     handleTypeButtons(typeButtons, (type) => {
         editArticleType = type;
@@ -44,33 +44,31 @@ export async function createEditArticleModal(articleId) {
     handleSentimentButtons(sentimentButtons, (sentiment) => {
         editArticleSentiment = sentiment;
     });
-
-     const sourceInput = modalContent.querySelector('#edit-article-source');
-      const dateInput = modalContent.querySelector('#edit-article-date');
-      const titleInput = modalContent.querySelector('#edit-article-title');
+      const sourceInput = modalContent.querySelector('#edit-article-source');
+     const dateInput = modalContent.querySelector('#edit-article-date');
+     const titleInput = modalContent.querySelector('#edit-article-title');
      const textInput = modalContent.querySelector('#edit-article-text');
      const viewsInput = modalContent.querySelector('#edit-article-views');
      const urlInput = modalContent.querySelector('#edit-article-url');
      const addressesInput = modalContent.querySelector('#edit-article-addresses');
      const speakerInput = modalContent.querySelector('#edit-article-speaker');
     const startTimeInput = modalContent.querySelector('#edit-article-start-time');
-     const isInspectionInput = modalContent.querySelector('#edit-article-inspection');
+    const isInspectionInput = modalContent.querySelector('#edit-article-inspection');
     const isMostViewedInput = modalContent.querySelector('#edit-article-most-viewed');
      const socialInput = modalContent.querySelector('#edit-article-social');
-
 
     sourceInput.value = article.source || '';
     dateInput.value = article.date || '';
     titleInput.value = article.title || '';
     textInput.value = article.text || '';
      viewsInput.value = article.views || '';
-     urlInput.value = article.url || '';
-      addressesInput.value = article.addresses ? article.addresses.join('\n') : '';
+    urlInput.value = article.url || '';
+     addressesInput.value = article.addresses ? article.addresses.join('\n') : '';
     speakerInput.value = article.speaker ? article.speaker.join('\n') : '';
-   startTimeInput.value = article.startTime || '';
+     startTimeInput.value = article.startTime || '';
       isInspectionInput.checked = article.isInspection || false;
     isMostViewedInput.checked = article.isMostViewed || false;
-      socialInput.value = article.social || 'none';
+     socialInput.value = article.social || 'none';
 
     saveBtn.addEventListener('click', saveEditedArticle);
 
@@ -79,16 +77,17 @@ export async function createEditArticleModal(articleId) {
         const date = dateInput.value;
         const title = titleInput.value;
          const text = textInput.value;
-       const views = viewsInput.value;
-        const url = urlInput.value;
-         const addressesInput = addressesInput.value;
-        const speakerInput = speakerInput.value;
-        const startTime = startTimeInput.value;
-         const isInspection = isInspectionInput.checked;
-       const isMostViewed = isMostViewedInput.checked;
-      const social = socialInput.value;
-        const addresses = addressesInput.split('\n').map(addr => addr.trim()).filter(addr => addr);
-       const speaker = speakerInput.split('\n').map(sp => sp.trim()).filter(sp => sp);
+        const views = viewsInput.value;
+         const url = urlInput.value;
+          const addressesInputValue = addressesInput.value;
+         const speakerInputValue = speakerInput.value;
+          const startTime = startTimeInput.value;
+        const isInspection = isInspectionInput.checked;
+         const isMostViewed = isMostViewedInput.checked;
+       const social = socialInput.value;
+
+         const addresses = addressesInputValue.split('\n').map(addr => addr.trim()).filter(addr => addr);
+         const speaker = speakerInputValue.split('\n').map(sp => sp.trim()).filter(sp => sp);
 
         const updatedArticle = {
             id: articleId,
