@@ -4,7 +4,6 @@ import { handleDragOver, handleDrop, handleDragStart } from "./drag-and-drop.js"
 import { formatDate, formatViews, getSocialNetworkName, findAddresses } from "./utils.js";
 import {filterArticles} from "./filter.js";
 
-
 const articleList = document.getElementById("article-list");
  const positiveList = document.getElementById("positive-list");
     const negativeList = document.getElementById("negative-list");

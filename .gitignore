@@ -1,5 +1,5 @@
+.gitignore
 *.doc
 *.docx
 *.xlsx
 *.xls
-style.css
