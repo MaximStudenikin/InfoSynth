@@ -1,82 +1,92 @@
 import { addArticle } from "./articles.js";
+import { closeModal } from "./modalUtils.js";
 import { clearText } from "./utils.js";
-import { closeModal, handleTypeButtons, handleSentimentButtons } from "./modalUtils.js";
+
 
 export async function createAddArticleModal() {
-    const modalOverlay = document.getElementById("modal-overlay");
-    const modalContent = document.getElementById("modal-content");
+  const modalOverlay = document.getElementById("modal-overlay");
+  const modalContent = document.getElementById("modal-content");
 
-    try {
-      const response = await fetch("addArticleModal.html");
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      modalContent.innerHTML = await response.text();
-    } catch (e) {
-      console.error("Failed to fetch modal HTML:", e);
-      modalContent.innerHTML = `<p>Failed to load modal content.</p>`;
-      return;
+  try {
+    const response = await fetch("addArticleModal.html");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
+    modalContent.innerHTML = await response.text();
+  } catch (e) {
+    console.error("Failed to fetch modal HTML:", e);
+    modalContent.innerHTML = `<p>Failed to load modal content.</p>`;
+     return;
+  }
+
+  modalOverlay.style.display = "flex";
+
+  const closeBtn = modalContent.querySelector(".close-modal");
+  const saveBtn = modalContent.querySelector("#save-add-article-btn");
+
+  const dateInput = modalContent.querySelector('#add-article-date');
+    const today = new Date();
+    const formattedToday = today.toISOString().split('T')[0];
+    dateInput.value = formattedToday;
+  closeModal(modalOverlay, closeBtn);
+
+  saveBtn.addEventListener("click", function saveNewArticle(event) {
+    event.preventDefault();
+
+    const sourceInput = modalContent.querySelector('#add-article-source');
+    const dateInput = modalContent.querySelector('#add-article-date');
+    const titleInput = modalContent.querySelector('#add-article-title');
+    const textInput = modalContent.querySelector('#add-article-text');
+    const viewsInput = modalContent.querySelector('#add-article-views');
+    const urlInput = modalContent.querySelector('#add-article-url');
+    const addressesInput = modalContent.querySelector('#add-article-addresses');
+     const speakerInput = modalContent.querySelector('#add-article-speaker');
+    const startTimeInput = modalContent.querySelector('#add-article-start-time');
+    const isInspectionInput = modalContent.querySelector('#add-article-inspection');
+    const isMostViewedInput = modalContent.querySelector('#add-article-most-viewed');
+     const typeSelect = modalContent.querySelector('#add-article-type');
+    const sentimentSelect = modalContent.querySelector('#add-article-sentiment');
+     const socialInput = modalContent.querySelector('#add-article-social');
 
 
-    modalOverlay.style.display = "flex";
 
-      const closeBtn = modalContent.querySelector('.close-modal');
-      const saveBtn = modalContent.querySelector('#save-article-btn');
-       const typeButtons = modalContent.querySelectorAll('[id^="article-type-"]');
-        const sentimentButtons = modalContent.querySelectorAll('[id^="article-sentiment-"]');
-
-    let articleType = null;
-    let articleSentiment = null;
-     closeModal(modalOverlay, closeBtn);
-
-    handleTypeButtons(typeButtons, (type) => {
-        articleType = type;
-    });
-
-     handleSentimentButtons(sentimentButtons, (sentiment) => {
-        articleSentiment = sentiment;
-    });
-
+    const source = sourceInput.value;
+    const date = dateInput.value;
+    const title = titleInput.value;
+    const text = textInput.value;
+     const views = viewsInput.value;
+     const url = urlInput.value;
+    const addressesInputValue = addressesInput.value;
+    const speakerInputValue = speakerInput.value;
+     const startTime = startTimeInput.value;
+   const isInspection = isInspectionInput.checked;
+    const isMostViewed = isMostViewedInput.checked;
+    const type = typeSelect.value;
+   const sentiment = sentimentSelect.value;
+    const social = socialInput.value;
+    const addresses = addressesInputValue.split('\n').map(addr => addr.trim()).filter(addr => addr);
+    const speaker = speakerInputValue.split('\n').map(sp => sp.trim()).filter(sp => sp);
 
 
-     saveBtn.addEventListener('click', saveArticle);
+    const newArticle = {
+        id: Date.now(),
+        source: clearText(source),
+       date: date,
+      title: clearText(title),
+        text: clearText(text),
+      views: views,
+      url: url,
+        addresses: addresses,
+       speaker: speaker,
+      startTime: startTime,
+      isInspection: isInspection,
+      isMostViewed: isMostViewed,
+      type: type,
+       sentiment: sentiment,
+      social: social
+    };
 
-    function saveArticle() {
-        const source = modalContent.querySelector('#article-source').value;
-        const date = modalContent.querySelector('#article-date').value;
-        const title = modalContent.querySelector('#article-title').value;
-        const text = modalContent.querySelector('#article-text').value;
-        const views = modalContent.querySelector('#article-views').value;
-         const url = modalContent.querySelector('#article-url').value;
-        const addressesInput = modalContent.querySelector('#article-addresses').value;
-         const speakerInput = modalContent.querySelector('#article-speaker').value;
-         const startTime = modalContent.querySelector('#article-start-time').value;
-         const isInspection = modalContent.querySelector('#article-inspection').checked;
-        const isMostViewed = modalContent.querySelector('#article-most-viewed').checked;
-         const social = modalContent.querySelector('#article-social').value;
-
-        const addresses = addressesInput.split('\n').map(addr => addr.trim()).filter(addr => addr);
-        const speaker = speakerInput.split('\n').map(sp => sp.trim()).filter(sp => sp);
-
-      const newArticle = {
-          id: Date.now(),
-            source: clearText(source),
-            date: date,
-            title: clearText(title),
-            text: clearText(text),
-             views: views,
-              url: url,
-               addresses: addresses,
-              speaker: speaker,
-            startTime: startTime,
-            isInspection: isInspection,
-             isMostViewed: isMostViewed,
-              type: articleType,
-              sentiment: articleSentiment,
-               social: social
-        };
-       addArticle(newArticle);
-       modalOverlay.style.display = 'none';
-    }
+    addArticle(newArticle);
+    modalOverlay.style.display = 'none';
+  });
 }

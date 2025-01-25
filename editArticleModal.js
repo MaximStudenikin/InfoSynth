@@ -1,112 +1,123 @@
-import { updateArticle, editArticle, articles } from "./articles.js";
+import { updateArticle, articles} from "./articles.js";
+import { closeModal } from "./modalUtils.js";
 import { clearText } from "./utils.js";
-import { closeModal, handleTypeButtons, handleSentimentButtons } from "./modalUtils.js";
+
 
 export async function createEditArticleModal(articleId) {
-    console.log("createEditArticleModal called with id:", articleId);
-    const modalOverlay = document.getElementById("modal-overlay");
-    const modalContent = document.getElementById("modal-content");
-
+  const modalOverlay = document.getElementById("modal-overlay");
+  const modalContent = document.getElementById("modal-content");
+    const article = articles.find(article => article.id === articleId);
+    if (!article) {
+        console.error(`Article with id ${articleId} not found`);
+        return;
+    }
     try {
-        const response = await fetch("editArticleModal.html");
+        const response = await fetch('editArticleModal.html');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         modalContent.innerHTML = await response.text();
-    } catch (e) {
+    } catch(e){
         console.error("Failed to fetch modal HTML:", e);
-         modalContent.innerHTML = `<p>Failed to load modal content.</p>`;
+        modalContent.innerHTML = `<p>Failed to load modal content.</p>`;
          return;
     }
-    const article = articles.find(article => article.id === articleId);
 
-    if (!article) {
-        console.error("Article not found with id:", articleId);
-        modalContent.innerHTML = `<div class="modal-header"><h2>Ошибка</h2><span class="close-modal">&times;</span></div><div class="modal-body"><p>Статья с указанным ID не найдена.</p></div>`;
-         modalOverlay.style.display = "flex";
-         const closeBtn = modalContent.querySelector('.close-modal');
-         closeModal(modalOverlay,closeBtn)
-        return;
-    }
+    modalOverlay.style.display = "flex";
 
-      modalOverlay.style.display = "flex";
-      const closeBtn = modalContent.querySelector('.close-modal');
-     const saveBtn = modalContent.querySelector('#save-edit-article-btn');
-     const typeButtons = modalContent.querySelectorAll('[id^="edit-article-type-"]');
-      const sentimentButtons = modalContent.querySelectorAll('[id^="edit-article-sentiment-"]');
+  const closeBtn = modalContent.querySelector(".close-modal");
+  const saveBtn = modalContent.querySelector("#save-edit-article-btn");
 
-      let editArticleType = article.type;
-    let editArticleSentiment = article.sentiment;
-    closeModal(modalOverlay, closeBtn);
-    handleTypeButtons(typeButtons, (type) => {
-        editArticleType = type;
-    });
-    handleSentimentButtons(sentimentButtons, (sentiment) => {
-        editArticleSentiment = sentiment;
-    });
-      const sourceInput = modalContent.querySelector('#edit-article-source');
-     const dateInput = modalContent.querySelector('#edit-article-date');
-     const titleInput = modalContent.querySelector('#edit-article-title');
-     const textInput = modalContent.querySelector('#edit-article-text');
-     const viewsInput = modalContent.querySelector('#edit-article-views');
-     const urlInput = modalContent.querySelector('#edit-article-url');
-     const addressesInput = modalContent.querySelector('#edit-article-addresses');
-     const speakerInput = modalContent.querySelector('#edit-article-speaker');
-    const startTimeInput = modalContent.querySelector('#edit-article-start-time');
-    const isInspectionInput = modalContent.querySelector('#edit-article-inspection');
+  const sourceInput = modalContent.querySelector('#edit-article-source');
+  console.log("sourceInput:", sourceInput);
+  const dateInput = modalContent.querySelector('#edit-article-date');
+   console.log("dateInput:", dateInput);
+  const titleInput = modalContent.querySelector('#edit-article-title');
+  console.log("titleInput:", titleInput);
+  const textInput = modalContent.querySelector('#edit-article-text');
+    console.log("textInput:", textInput);
+   const viewsInput = modalContent.querySelector('#edit-article-views');
+    console.log("viewsInput:", viewsInput);
+   const urlInput = modalContent.querySelector('#edit-article-url');
+    console.log("urlInput:", urlInput);
+  const addressesInput = modalContent.querySelector('#edit-article-addresses');
+    console.log("addressesInput:", addressesInput);
+  const speakerInput = modalContent.querySelector('#edit-article-speaker');
+   console.log("speakerInput:", speakerInput);
+  const startTimeInput = modalContent.querySelector('#edit-article-start-time');
+    console.log("startTimeInput:", startTimeInput);
+   const isInspectionInput = modalContent.querySelector('#edit-article-inspection');
+    console.log("isInspectionInput:", isInspectionInput);
     const isMostViewedInput = modalContent.querySelector('#edit-article-most-viewed');
-     const socialInput = modalContent.querySelector('#edit-article-social');
+      console.log("isMostViewedInput:", isMostViewedInput);
+   const typeSelect = modalContent.querySelector('#edit-article-type');
+      console.log("typeSelect:", typeSelect);
+    const sentimentSelect = modalContent.querySelector('#edit-article-sentiment');
+     console.log("sentimentSelect:", sentimentSelect);
+      const socialInput = modalContent.querySelector('#edit-article-social');
+        console.log("socialInput:", socialInput);
 
-    sourceInput.value = article.source || '';
-    dateInput.value = article.date || '';
-    titleInput.value = article.title || '';
-    textInput.value = article.text || '';
-     viewsInput.value = article.views || '';
+
+  console.log("dateInput:", dateInput);
+
+  sourceInput.value = article.source || '';
+  dateInput.value = article.date || '';
+  titleInput.value = article.title || '';
+  textInput.value = article.text || '';
+    viewsInput.value = article.views || '';
     urlInput.value = article.url || '';
-     addressesInput.value = article.addresses ? article.addresses.join('\n') : '';
+    addressesInput.value = article.addresses ? article.addresses.join('\n') : '';
     speakerInput.value = article.speaker ? article.speaker.join('\n') : '';
-     startTimeInput.value = article.startTime || '';
-      isInspectionInput.checked = article.isInspection || false;
-    isMostViewedInput.checked = article.isMostViewed || false;
-     socialInput.value = article.social || 'none';
+   startTimeInput.value = article.startTime || '';
+    isInspectionInput.checked = article.isInspection || false;
+   isMostViewedInput.checked = article.isMostViewed || false;
+    typeSelect.value = article.type;
+    sentimentSelect.value = article.sentiment;
+    socialInput.value = article.social;
 
-    saveBtn.addEventListener('click', saveEditedArticle);
 
-    function saveEditedArticle() {
-        const source = sourceInput.value;
-        const date = dateInput.value;
-        const title = titleInput.value;
-         const text = textInput.value;
-        const views = viewsInput.value;
-         const url = urlInput.value;
-          const addressesInputValue = addressesInput.value;
-         const speakerInputValue = speakerInput.value;
-          const startTime = startTimeInput.value;
-        const isInspection = isInspectionInput.checked;
-         const isMostViewed = isMostViewedInput.checked;
-       const social = socialInput.value;
+  closeModal(modalOverlay, closeBtn);
 
-         const addresses = addressesInputValue.split('\n').map(addr => addr.trim()).filter(addr => addr);
-         const speaker = speakerInputValue.split('\n').map(sp => sp.trim()).filter(sp => sp);
 
-        const updatedArticle = {
-            id: articleId,
-            source: clearText(source),
-             date: date,
-            title: clearText(title),
-            text: clearText(text),
-            views: views,
-            url: url,
-            addresses: addresses,
-            speaker: speaker,
-            startTime: startTime,
-             isInspection: isInspection,
-            isMostViewed: isMostViewed,
-            type: editArticleType,
-            sentiment: editArticleSentiment,
-            social: social
-        };
-         updateArticle(updatedArticle);
-        modalOverlay.style.display = 'none';
-    }
+  saveBtn.addEventListener("click", function saveEditedArticle(event) {
+    event.preventDefault();
+    const source = sourceInput.value;
+    const date = dateInput.value;
+    const title = titleInput.value;
+    const text = textInput.value;
+    const views = viewsInput.value;
+    const url = urlInput.value;
+    const addressesInputValue = addressesInput.value;
+    const speakerInputValue = speakerInput.value;
+    const startTime = startTimeInput.value;
+    const isInspection = isInspectionInput.checked;
+    const isMostViewed = isMostViewedInput.checked;
+    const type = typeSelect.value;
+    const sentiment = sentimentSelect.value;
+    const social = socialInput.value;
+    const addresses = addressesInputValue.split('\n').map(addr => addr.trim()).filter(addr => addr);
+   const speaker = speakerInputValue.split('\n').map(sp => sp.trim()).filter(sp => sp);
+
+      const updatedArticle = {
+        id: article.id,
+        source: clearText(source),
+        date: date,
+        title: clearText(title),
+        text: clearText(text),
+          views: views,
+        url: url,
+          addresses: addresses,
+         speaker: speaker,
+       startTime: startTime,
+        isInspection: isInspection,
+        isMostViewed: isMostViewed,
+         type: type,
+          sentiment: sentiment,
+          social: social
+    };
+    updateArticle(updatedArticle);
+    modalOverlay.style.display = 'none';
+
+  });
+
 }
