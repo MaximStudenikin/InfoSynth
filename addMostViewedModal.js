@@ -1,5 +1,4 @@
 import { addArticle } from "./articles.js";
-import { clearText } from "./utils.js";
 import { closeModal, handleTypeButtons, handleSentimentButtons } from "./modalUtils.js";
 
 export async function createAddMostViewedPostModal() {

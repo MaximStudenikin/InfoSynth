@@ -1,6 +1,5 @@
 import { addArticle } from "./articles.js";
 import { closeModal } from "./modalUtils.js";
-import { clearText } from "./utils.js";
 
 export async function createAddArticleModal() {
   const modalOverlay = document.getElementById("modal-overlay");
@@ -19,7 +18,7 @@ export async function createAddArticleModal() {
   }
 
   modalOverlay.style.display = "flex";
-   closeModal(modalOverlay);
+  closeModal(modalOverlay);
 
   const saveBtn = modalContent.querySelector("#save-add-article-btn");
 
@@ -46,7 +45,6 @@ export async function createAddArticleModal() {
     const sentimentSelect = modalContent.querySelector('#add-article-sentiment');
      const socialInput = modalContent.querySelector('#add-article-social');
 
-
     const source = sourceInput.value;
     const date = dateInput.value;
     const title = titleInput.value;
@@ -67,10 +65,10 @@ export async function createAddArticleModal() {
 
     const newArticle = {
         id: Date.now(),
-        source: clearText(source),
-      date: date,
-      title: clearText(title),
-        text: clearText(text),
+        source: source,
+       date: date,
+      title: title,
+        text: text,
       views: views,
       url: url,
         addresses: addresses,

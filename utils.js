@@ -37,11 +37,6 @@ const addresses = text.match(addressRegex);
 return addresses ? addresses.map(addr => addr.trim()) : [];
 }
 
-export function clearText(text) {
-  if (!text) return '';
-  return text.replace(/[\p{Emoji}\s]+/gu, ' ').trim().replace(/\n+/g, '\n');
-}
-
 export function removeEmoji(text) {
     if (!text) return '';
     return text.replace(/[\p{Emoji}]/gu, '');
