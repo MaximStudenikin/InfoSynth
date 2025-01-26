@@ -1,17 +1,29 @@
-import {articles, updateArticleList} from "./articles.js";
+import { renderArticles } from "./modules.js";
 
-export function filterArticles() {
-     const searchInput = document.getElementById('search-input');
-    const filterArticlesSelect = document.getElementById('filter-articles');
-    const searchTerm = searchInput.value.toLowerCase();
-     const filterValue = filterArticlesSelect.value;
-     const filteredArticles = articles.filter(article => {
-          const titleMatch = article.title && article.title.toLowerCase().includes(searchTerm);
-          const textMatch = article.text && article.text.toLowerCase().includes(searchTerm);
-          const sourceMatch = article.source && article.source.toLowerCase().includes(searchTerm);
-        const typeMatch = filterValue === 'all' || article.type === filterValue;
+const filterButtons = document.querySelectorAll(".filter-btn");
+const searchInput = document.getElementById("search-input");
 
-        return typeMatch && (titleMatch || textMatch || sourceMatch);
+filterButtons.forEach(button => {
+    button.addEventListener("click", function() {
+        filterButtons.forEach(btn => btn.classList.remove("active"));
+        this.classList.add("active");
+        const filterType = this.dataset.filter;
+      renderArticles(filterType, searchInput.value);
     });
-     updateArticleList(filteredArticles);
+});
+
+
+searchInput.addEventListener('input', function() {
+    const searchText = this.value;
+    const activeFilter = document.querySelector('.filter-btn.active');
+    const filterType = activeFilter ? activeFilter.dataset.filter : 'all';
+    renderArticles(filterType, searchText);
+})
+
+function filterArticles() {
+    const filterType = document.getElementById('filter-articles').value;
+    const searchText = document.getElementById('search-input').value;
+    renderArticles(filterType, searchText);
 }
+
+export { filterArticles };

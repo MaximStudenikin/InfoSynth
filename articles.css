@@ -1,4 +1,9 @@
 /* articles.css */
+.article-actions {
+  display: flex;
+  gap: 5px;
+}
+
 .article-lists {
   display: flex;
   justify-content: space-around;

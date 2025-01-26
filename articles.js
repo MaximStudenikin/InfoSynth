@@ -1,206 +1,195 @@
-import { formatViews, formatDate, getSocialNetworkName } from "./utils.js";
-import {filterArticles} from "./filter.js";
-import {updateStatistic} from "./statistic.js"
-import { removeEmoji } from "./utils.js";
-import { createEditArticleModal } from "./modal.js";
+import { closeModal, createEditArticleModal } from "./modules.js";
 
+export let articles = JSON.parse(localStorage.getItem('articles')) || [];
 
-export let articles = JSON.parse(localStorage.getItem('articles') || '[]');
-
-
-export function updateArticleList() {
-  const positiveList = document.getElementById("positive-list");
-  const negativeList = document.getElementById("negative-list");
-  positiveList.innerHTML = "";
-  negativeList.innerHTML = "";
-
-
-  function createArticleItem(article, index) {
-    const li = document.createElement("li");
-    li.classList.add('article-item');
-    li.dataset.id = article.id;
-    let sourceLine = "";
-    if (article.type === "social") {
-        const socialName = getSocialNetworkName(article.url);
-        sourceLine += `${socialName ? `${socialName} - ` : ""}`;
-    }
-    if(article.source) {
-        sourceLine += `${article.source}`;
-    }
-    if (article.type === "social" && article.views) {
-        sourceLine += ` (${formatViews(article.views)})`;
-    }
-    if (sourceLine) {
-        li.innerHTML += `<h1 id="edition">${index + 1}) ${sourceLine}</h1>`;
-    }
-    if (article.date) {
-        li.innerHTML += `<p id="date">${formatDate(article.date)}</p>`;
-    }
-    if (article.title) {
-        li.innerHTML += `<h3 id="title">${article.title}</h3>`;
-    }
-    if (article.text) {
-        li.innerHTML += `<p id="text">${article.text.substring(0, 100)}...</p>`;
-    }
-    if (article.addresses && article.addresses.length > 0 && !article.addresses.every(addr => !addr || addr.trim().toLowerCase() === "нет")) {
-        li.innerHTML += `<p id="adress">Адрес: ${article.addresses
-            .filter((addr) => addr && addr.trim().toLowerCase() !== "нет")
-            .join(", ")}</p>`;
-    }
-    if(article.startTime) {
-      li.innerHTML += `<p id="start_time">Начало с ${article.startTime}</p>`;
-    }
-    if (article.speaker && article.speaker.length > 0 && !article.speaker.every(speaker => !speaker || speaker.trim().toLowerCase() === "нет")) {
-        li.innerHTML += `<p id="speaker">Спикер: ${article.speaker
-            .filter((speaker) => speaker && speaker.trim().toLowerCase() !== "нет")
-            .join("<br>")}</p>`;
-    }
-    if (article.url) {
-        li.innerHTML += `<p><a id="ref" href="${article.url}" target="_blank">${article.url}</a></p>`;
-    }
-    const deleteBtn = document.createElement('button');
-    deleteBtn.classList.add('delete-btn');
-    deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-    deleteBtn.addEventListener('click', () => deleteArticle(article.id));
-    li.appendChild(deleteBtn);
-    const editBtn = document.createElement('button');
-    editBtn.classList.add('edit-btn');
-    editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-    editBtn.addEventListener('click', () => editArticle(article.id));
-    li.appendChild(editBtn);
-    return li;
-  }
-
-  const positiveArticles = articles.filter(article => article.sentiment === "positive");
-  const negativeArticles = articles.filter(article => article.sentiment === "negative");
-
-  function sortArticles(articles) {
-    return articles.sort((a, b) => {
-        const typeOrder = ["video", "news", "social"];
-        const typeA = typeOrder.indexOf(a.type);
-        const typeB = typeOrder.indexOf(b.type);
-        return typeA - typeB;
-    });
-  }
-
-  sortArticles(positiveArticles).forEach((article, index) => positiveList.appendChild(createArticleItem(article, index)));
-  sortArticles(negativeArticles).forEach((article, index) => negativeList.appendChild(createArticleItem(article, index)));
-
-}
-
-export function saveArticles() {
+function saveArticles() {
     localStorage.setItem('articles', JSON.stringify(articles));
 }
 
-export function addArticle(article) {
-    articles.push(article);
+export function addArticle(newArticle) {
+    articles.push(newArticle);
     saveArticles();
-    updateArticleList();
-    updateStatistic();
-    updateMostViewed();
-    filterArticles();
+    renderArticles();
+     import("./modules.js").then(modules => {
+        modules.renderStatistic();
+    });
 }
 
-export function deleteArticle(id) {
-    articles = articles.filter(article => article.id !== id);
+export function deleteArticle(articleId) {
+    articles = articles.filter(article => article.id !== articleId);
     saveArticles();
-    updateArticleList();
-    updateStatistic();
-    updateMostViewed();
-    filterArticles();
+    renderArticles();
+    import("./modules.js").then(modules => {
+        modules.renderStatistic();
+    });
 }
 
-export function clearText(text) {
-  if (!text) return '';
-
-  let cleanedText = removeEmoji(text);
-    cleanedText = cleanedText.replace(/\s+/g, ' ').trim();
-
-  return cleanedText;
-}
-
-export function updateArticleSentiment(id, sentiment) {
-      const articleIndex = articles.findIndex(article => article.id === id);
-    if (articleIndex !== -1) {
-        articles[articleIndex].sentiment = sentiment;
-        saveArticles();
-        updateArticleList();
-    }
-}
-export function editArticle(id) {
-    createEditArticleModal(id);
-}
 export function updateArticle(updatedArticle) {
-    const index = articles.findIndex(article => article.id === updatedArticle.id);
-    if (index !== -1) {
-        articles[index] = updatedArticle;
-        saveArticles();
-        updateArticleList();
-        updateStatistic();
-        updateMostViewed();
-        filterArticles();
-    }
+     articles = articles.map(article =>
+        article.id === updatedArticle.id ? updatedArticle : article
+    );
+    saveArticles();
+    renderArticles();
+    import("./modules.js").then(modules => {
+        modules.renderStatistic();
+    });
 }
 
-export function updateMostViewed() {
-    const mostViewedContent = document.getElementById("most-viewed-content");
-    if (articles.length === 0) {
-        mostViewedContent.innerHTML = "<p>Нет данных</p>";
+export function renderArticles(filterType = 'all', searchText = '') {
+    console.log("renderArticles called with:", articles, filterType, searchText);
+    const positiveList = document.getElementById('positive-list');
+    const negativeList = document.getElementById('negative-list');
+    if (!positiveList || !negativeList) {
+        console.error("positiveList or negativeList element not found");
         return;
     }
 
-    let mostViewed = articles.reduce((prev, current) => {
-        const prevViews = prev.views ? parseInt(prev.views) : 0;
-        const currentViews = current.views ? parseInt(current.views) : 0;
-        if (current.type === 'social' && currentViews > prevViews) {
-            return current;
-        }
-        return prev;
-    }, articles[0]);
-    const index = articles.findIndex(el => el === mostViewed)
-    if (!mostViewed || (!mostViewed.views && mostViewed.type !== 'social')) {
-        mostViewedContent.innerHTML = "<p>Нет данных</p>";
+    positiveList.innerHTML = '';
+    negativeList.innerHTML = '';
+
+
+    let filteredArticles = [...articles];
+
+    if (searchText) {
+        const lowerSearchText = searchText.toLowerCase();
+        filteredArticles = filteredArticles.filter(article =>
+            article.title.toLowerCase().includes(lowerSearchText) ||
+            article.text.toLowerCase().includes(lowerSearchText) ||
+            article.source.toLowerCase().includes(lowerSearchText)
+        );
+    }
+
+    if (filterType !== 'all') {
+        filteredArticles = filteredArticles.filter(article => article.sentiment === filterType);
+    }
+    if (filterType === 'inspection') {
+        filteredArticles = filteredArticles.filter(article => article.isInspection);
+    }
+
+    if (filteredArticles.length === 0) {
+      positiveList.innerHTML = '<p>Статьи не найдены.</p>';
+      negativeList.innerHTML = '<p>Статьи не найдены.</p>';
         return;
     }
-    let mostViewedHTML = "";
-    let sourceLine = "";
-    if (mostViewed.type === "social") {
-        const socialName = getSocialNetworkName(mostViewed.url);
-        sourceLine += `${socialName ? `${socialName} - ` : ""}`;
+
+
+    filteredArticles.forEach(article => {
+        const articleElement = renderArticle(article);
+        if (article.sentiment === 'positive') {
+             positiveList.appendChild(articleElement);
+        } else if (article.sentiment === 'negative') {
+            negativeList.appendChild(articleElement);
+        } else {
+            positiveList.appendChild(articleElement);
+        }
+    });
+    positiveList.addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete-article-btn')) {
+            const articleId = parseInt(event.target.dataset.id, 10);
+            deleteArticle(articleId);
+        }
+        if (event.target.classList.contains('edit-article-btn')) {
+            const articleId = parseInt(event.target.dataset.id, 10);
+              console.log("edit button click, articleId:", articleId);
+            createEditArticleModal(articleId);
+        }
+        if (event.target.classList.contains('copy-article-btn')) {
+            const articleId = parseInt(event.target.dataset.id, 10);
+             copyArticleToClipboard(articleId);
+        }
+    });
+       negativeList.addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete-article-btn')) {
+            const articleId = parseInt(event.target.dataset.id, 10);
+            deleteArticle(articleId);
+        }
+        if (event.target.classList.contains('edit-article-btn')) {
+            const articleId = parseInt(event.target.dataset.id, 10);
+            console.log("edit button click, articleId:", articleId);
+            createEditArticleModal(articleId);
+        }
+           if (event.target.classList.contains('copy-article-btn')) {
+             const articleId = parseInt(event.target.dataset.id, 10);
+               copyArticleToClipboard(articleId);
+           }
+    });
+}
+
+function renderArticle(article) {
+    console.log("renderArticle called for:", article);
+
+    const articleElement = document.createElement('div');
+    articleElement.classList.add('article-preview');
+
+    const isMostViewedClass = article.isMostViewed ? 'most-viewed' : '';
+    const isInspectionClass = article.isInspection ? 'inspection-post' : '';
+    if (isMostViewedClass) {
+        articleElement.classList.add(isMostViewedClass);
     }
-    if (mostViewed.source) {
-        sourceLine += `${mostViewed.source}`;
+    if (isInspectionClass) {
+        articleElement.classList.add(isInspectionClass);
     }
-    if (mostViewed.type === "social" && mostViewed.views) {
-        sourceLine += ` (${formatViews(mostViewed.views)})`;
+    articleElement.draggable = true;
+    articleElement.dataset.id = article.id;
+
+    let addressesHTML = '';
+    if (article.addresses && article.addresses.length > 0) {
+        addressesHTML = `<p><strong>Адреса:</strong> ${article.addresses.join(', ')}</p>`;
     }
-    if (sourceLine) {
-        mostViewedHTML += `<h1 id="edition">${index + 1}) ${sourceLine}</h1>`;
+
+    let speakerHTML = '';
+    if (article.speaker && article.speaker.length > 0) {
+        speakerHTML = `<p><strong>Спикеры:</strong> ${article.speaker.join(', ')}</p>`;
     }
-    if (mostViewed.date) {
-        mostViewedHTML += `<p id="date">${formatDate(mostViewed.date)}</p>`;
+
+    const startTimeHTML = article.startTime ? `<p><strong>Начало видео:</strong> ${article.startTime}</p>` : '';
+
+
+    articleElement.innerHTML = `
+         <h3>${article.title}</h3>
+          <p><strong>Источник:</strong> ${article.source}</p>
+         <p><strong>Дата:</strong> ${article.date}</p>
+         <p><strong>Тональность:</strong> ${article.sentiment}</p>
+        ${article.type === 'social' && article.social !== 'none' ? `<p><strong>Социальная сеть:</strong> ${article.social}</p>` : ''}
+         ${article.views ? `<p><strong>Просмотры:</strong> ${article.views}</p>` : ''}
+         <p>${article.text.length > 500 ? article.text.substring(0, 500) + '...' : article.text}</p>
+        ${addressesHTML}
+       ${speakerHTML}
+         ${startTimeHTML}
+        ${article.url ? `<p><strong>Ссылка:</strong> <a href="${article.url}" target="_blank">Открыть</a></p>` : ''}
+        <div class="article-actions">
+        <button class="copy-article-btn" data-id="${article.id}">Копировать</button>
+             <button class="edit-article-btn" data-id="${article.id}">Редактировать</button>
+            <button class="delete-article-btn" data-id="${article.id}">Удалить</button>
+        </div>
+    `;
+
+    return articleElement;
+}
+
+function copyArticleToClipboard(articleId) {
+    const article = articles.find(article => article.id === articleId);
+    if (!article) {
+        console.error(`Article with id ${articleId} not found`);
+        return;
     }
-    if (mostViewed.title) {
-        mostViewedHTML += `<h3 id="title">${mostViewed.title}</h3>`;
-    }
-    if (mostViewed.text) {
-        mostViewedHTML += `<p id="text">${mostViewed.text.substring(0, 100)}...</p>`;
-    }
-    if (mostViewed.addresses && mostViewed.addresses.length > 0 && !mostViewed.addresses.every(addr => !addr || addr.trim().toLowerCase() === "нет")) {
-        mostViewedHTML += `<p id="adress">Адрес: ${mostViewed.addresses
-            .filter((addr) => addr && addr.trim().toLowerCase() !== "нет")
-            .join(", ")}</p>`;
-    }
-    if (mostViewed.startTime) {
-        mostViewedHTML += `<p id="start_time">Начало с ${mostViewed.startTime}</p>`;
-    }
-    if (mostViewed.speaker && mostViewed.speaker.length > 0 && !mostViewed.speaker.every(speaker => !speaker || speaker.trim().toLowerCase() === "нет")) {
-        mostViewedHTML += `<p id="speaker">Спикер: ${mostViewed.speaker
-            .filter((speaker) => speaker && speaker.trim().toLowerCase() !== "нет")
-            .join("<br>")}</p>`;
-    }
-    if (mostViewed.url) {
-        mostViewedHTML += `<p><a id="ref" href="${mostViewed.url}" target="_blank">${mostViewed.url}</a></p>`;
-    }
-    mostViewedContent.innerHTML = mostViewedHTML;
+    const textToCopy = `
+Заголовок: ${article.title}
+Источник: ${article.source}
+Дата: ${article.date}
+Тональность: ${article.sentiment}
+${article.type === 'social' && article.social !== 'none' ? `Социальная сеть: ${article.social}` : ''}
+${article.views ? `Просмотры: ${article.views}` : ''}
+Текст: ${article.text}
+${article.addresses && article.addresses.length > 0 ? `Адреса: ${article.addresses.join(', ')}` : ''}
+${article.speaker && article.speaker.length > 0 ? `Спикеры: ${article.speaker.join(', ')}` : ''}
+${article.startTime ? `Начало видео: ${article.startTime}` : ''}
+${article.url ? `Ссылка: ${article.url}` : ''}
+    `;
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        alert('Статья скопирована в буфер обмена!');
+    }).catch(err => {
+        console.error('Failed to copy article: ', err);
+        alert('Не удалось скопировать статью в буфер обмена.');
+    });
 }
