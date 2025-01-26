@@ -1,7 +1,8 @@
-export function closeModal(modalOverlay, closeBtn) {
-  closeBtn.addEventListener('click', () => {
-       modalOverlay.style.display = 'none';
-   });
+export function closeModal(modalOverlay) {
+  const closeBtn = modalOverlay.querySelector("#close-modal");
+  closeBtn.addEventListener("click", () => {
+    modalOverlay.style.display = "none";
+  });
 }
 
 export function handleTypeButtons(buttons, onTypeSelect) {
