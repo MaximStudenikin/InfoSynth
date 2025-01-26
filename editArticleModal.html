@@ -1,78 +1,79 @@
 <div class="modal-header">
-  <h2>Редактировать статью</h2>
-  <span id="close-modal">&times;</span>
+    <h2>Редактировать статью</h2>
+    <span id="close-modal">&times;</span>
 </div>
 <div class="modal-body">
-  <form id="edit-article-form">
-      <!-- Блок с технической информацией -->
-      <div class="form-group">
-          <h3>Техническая информация</h3>
-          <label for="edit-article-date">Дата:</label>
-          <input type="date" id="edit-article-date" name="date" required>
-          <label for="edit-article-sentiment">Тональность статьи:</label>
-          <select id="edit-article-sentiment" name="sentiment" required>
-              <option value="positive">Позитив</option>
-              <option value="negative">Негатив</option>
-          </select>
-          <label for="edit-article-type">Тип статьи:</label>
-          <select id="edit-article-type" name="type" required>
-              <option value="news">Новость</option>
-              <option value="social">Социальная сеть</option>
-              <option value="video">Видео</option>
-          </select>
-          <label for="edit-article-social">Социальная сеть:</label>
-          <select id="edit-article-social" name="social">
-              <option value="none">Нет</option>
-              <option value="vk">Вконтакте</option>
-              <option value="ok">Одноклассники</option>
-              <option value="telegram">Telegram</option>
-              <option value="youtube">YouTube</option>
-          </select>
-          <label for="edit-article-views">Количество просмотров:</label>
-          <input type="number" id="edit-article-views" name="views" >
-      </div>
+    <form id="edit-article-form">
+        <!-- Блок с технической информацией -->
+        <div class="form-group">
+            <h3>Техническая информация</h3>
+            <label for="edit-article-date">Дата:</label>
+            <input type="date" id="edit-article-date" name="date" required>
+            <label for="edit-article-sentiment">Тональность статьи:</label>
+            <select id="edit-article-sentiment" name="sentiment" required>
+                <option value="positive">Позитив</option>
+                <option value="negative">Негатив</option>
+            </select>
+            <label for="edit-article-type">Тип статьи:</label>
+            <select id="edit-article-type" name="type" required>
+                <option value="news">Новость</option>
+                <option value="social">Социальная сеть</option>
+                <option value="video">Видео</option>
+            </select>
+             <label for="edit-article-social">Социальная сеть:</label>
+            <select id="edit-article-social" name="social">
+                <option value="none">Нет</option>
+                <option value="vk">Вконтакте</option>
+                <option value="ok">Одноклассники</option>
+                <option value="telegram">Telegram</option>
+                <option value="youtube">YouTube</option>
+            </select>
+            <label for="edit-article-views">Количество просмотров:</label>
+            <input type="number" id="edit-article-views" name="views" >
+        </div>
 
-      <!-- Блок с текстовой информацией -->
-      <div class="form-group">
-          <h3>Текстовая информация</h3>
-          <label for="edit-article-source">Издание:</label>
-          <input type="text" id="edit-article-source" name="source">
+        <!-- Блок с текстовой информацией -->
+        <div class="form-group">
+            <h3>Текстовая информация</h3>
+            <label for="edit-article-source">Издание:</label>
+            <input type="text" id="edit-article-source" name="source">
 
-          <label for="edit-article-title">Заголовок:</label>
-          <input type="text" id="edit-article-title" name="title">
+            <label for="edit-article-title">Заголовок:</label>
+            <input type="text" id="edit-article-title" name="title">
 
-          <label for="edit-article-text">Текст статьи:</label>
-          <textarea id="edit-article-text" name="text"></textarea>
+            <label for="edit-article-text">Текст статьи:</label>
+            <textarea id="edit-article-text" name="text"></textarea>
 
-          <label for="edit-article-url">Ссылка:</label>
-          <input type="url" id="edit-article-url" name="url">
-      </div>
+            <label for="edit-article-url">Ссылка:</label>
+            <input type="url" id="edit-article-url" name="url">
+        </div>
 
-      <!-- Блок с дополнительной информацией -->
-      <div class="form-group">
-          <h3>Дополнительная информация</h3>
+         <!-- Блок с дополнительной информацией -->
+        <div class="form-group">
+            <h3>Дополнительная информация</h3>
 
-          <label for="edit-article-addresses">Адрес:</label>
-          <textarea id="edit-article-addresses" name="addresses"></textarea>
+            <label for="edit-article-addresses">Адрес:</label>
+            <textarea id="edit-article-addresses" name="addresses"></textarea>
 
-          <label for="edit-article-speaker">Спикер:</label>
-          <textarea id="edit-article-speaker" name="speaker"></textarea>
+             <label for="edit-article-speaker">Спикер:</label>
+            <textarea id="edit-article-speaker" name="speaker"></textarea>
 
 
-          <label for="edit-article-start-time">Начало видео:</label>
-          <input type="text" id="edit-article-start-time" name="startTime">
+            <label for="edit-article-start-time">Начало видео:</label>
+            <input type="text" id="edit-article-start-time" name="startTime">
 
-          <label>
-              <input type="checkbox" id="edit-article-inspection" name="isInspection"> Сюжет с участием инспекции
-          </label>
-          <label>
-              <input type="checkbox" id="edit-article-most-viewed" name="isMostViewed"> Самый охватываемый пост
-          </label>
-      </div>
+             <label>
+                <input type="checkbox" id="edit-article-inspection" name="isInspection"> Сюжет с участием инспекции
+            </label>
+            <label>
+                <input type="checkbox" id="edit-article-most-viewed" name="isMostViewed"> Самый охватываемый пост
+            </label>
+        </div>
 
-      <div class="modal-footer">
-          <button type="button" id="save-edit-article-btn">Сохранить</button>
-          <button type="button" id="close-modal">Отмена</button>
-      </div>
-  </form>
+
+    </form>
 </div>
+ <div class="modal-footer">
+        <button type="button" id="save-edit-article-btn">Сохранить</button>
+        <button type="button" id="close-modal">Отмена</button>
+    </div>

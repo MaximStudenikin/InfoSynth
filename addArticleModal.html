@@ -4,76 +4,73 @@
 </div>
 <div class="modal-body">
   <form id="add-article-form">
-    <!-- Блок с технической информацией -->
-    <div class="form-group">
-      <h3>Техническая информация</h3>
-        <label for="add-article-date">Дата:</label>
-        <input type="date" id="add-article-date" name="date" required>
-        <label for="add-article-sentiment">Тональность статьи:</label>
-        <select id="add-article-sentiment" name="sentiment" required>
-            <option value="positive">Позитив</option>
-            <option value="negative">Негатив</option>
-        </select>
-        <label for="add-article-type">Тип статьи:</label>
-        <select id="add-article-type" name="type" required>
-            <option value="news">Новость</option>
-            <option value="social">Социальная сеть</option>
-            <option value="video">Видео</option>
-        </select>
-        <label for="add-article-social">Социальная сеть:</label>
-        <select id="add-article-social" name="social">
-            <option value="none">Нет</option>
-            <option value="vk">Вконтакте</option>
-            <option value="ok">Одноклассники</option>
-            <option value="telegram">Telegram</option>
-             <option value="youtube">YouTube</option>
-        </select>
-        <label for="add-article-views">Количество просмотров:</label>
-        <input type="number" id="add-article-views" name="views" >
+      <!-- Блок с технической информацией -->
+      <div class="form-group">
+          <h3>Техническая информация</h3>
+          <label for="add-article-date">Дата:</label>
+          <input type="date" id="add-article-date" name="date" required>
+          <label for="add-article-sentiment">Тональность статьи:</label>
+          <select id="add-article-sentiment" name="sentiment" required>
+              <option value="positive">Позитив</option>
+              <option value="negative">Негатив</option>
+          </select>
+          <label for="add-article-type">Тип статьи:</label>
+          <select id="add-article-type" name="type" required>
+              <option value="news">Новость</option>
+              <option value="social">Социальная сеть</option>
+              <option value="video">Видео</option>
+          </select>
+          <label for="add-article-social">Социальная сеть:</label>
+          <select id="add-article-social" name="social">
+              <option value="none">Нет</option>
+              <option value="vk">Вконтакте</option>
+              <option value="ok">Одноклассники</option>
+              <option value="telegram">Telegram</option>
+              <option value="youtube">YouTube</option>
+          </select>
+           <label for="add-article-views">Количество просмотров:</label>
+          <input type="number" id="add-article-views" name="views" >
+      </div>
 
-    </div>
+      <!-- Блок с текстовой информацией -->
+      <div class="form-group">
+          <h3>Текстовая информация</h3>
+          <label for="add-article-source">Издание:</label>
+          <input type="text" id="add-article-source" name="source">
 
-    <!-- Блок с текстовой информацией -->
-    <div class="form-group">
-      <h3>Текстовая информация</h3>
-        <label for="add-article-source">Издание:</label>
-        <input type="text" id="add-article-source" name="source">
+          <label for="add-article-title">Заголовок:</label>
+          <input type="text" id="add-article-title" name="title">
 
-        <label for="add-article-title">Заголовок:</label>
-        <input type="text" id="add-article-title" name="title">
+          <label for="add-article-text">Текст статьи:</label>
+          <textarea id="add-article-text" name="text"></textarea>
 
-      <label for="add-article-text">Текст статьи:</label>
-      <textarea id="add-article-text" name="text"></textarea>
+          <label for="add-article-url">Ссылка:</label>
+          <input type="url" id="add-article-url" name="url">
+      </div>
 
-        <label for="add-article-url">Ссылка:</label>
-        <input type="url" id="add-article-url" name="url">
-    </div>
+      <!-- Блок с дополнительной информацией -->
+      <div class="form-group">
+          <h3>Дополнительная информация</h3>
+          <label for="add-article-addresses">Адрес:</label>
+          <textarea id="add-article-addresses" name="addresses"></textarea>
 
-    <!-- Блок с дополнительной информацией -->
-    <div class="form-group">
-      <h3>Дополнительная информация</h3>
+          <label for="add-article-speaker">Спикер:</label>
+          <textarea id="add-article-speaker" name="speaker"></textarea>
 
-      <label for="add-article-addresses">Адрес:</label>
-      <textarea id="add-article-addresses" name="addresses"></textarea>
+          <label for="add-article-start-time">Начало видео:</label>
+          <input type="text" id="add-article-start-time" name="startTime">
 
-      <label for="add-article-speaker">Спикер:</label>
-       <textarea id="add-article-speaker" name="speaker"></textarea>
-
-
-      <label for="add-article-start-time">Начало видео:</label>
-      <input type="text" id="add-article-start-time" name="startTime">
-
-      <label>
-        <input type="checkbox" id="add-article-inspection" name="isInspection"> Сюжет с участием инспекции
-      </label>
-      <label>
-        <input type="checkbox" id="add-article-most-viewed" name="isMostViewed"> Самый охватываемый пост
-      </label>
-    </div>
-
-    <div class="modal-footer">
-      <button type="button" id="save-add-article-btn">Сохранить</button>
-      <button type="button" id="close-modal">Отмена</button>
-    </div>
+          <label>
+              <input type="checkbox" id="add-article-inspection" name="isInspection"> Сюжет с участием инспекции
+          </label>
+          <label>
+              <input type="checkbox" id="add-article-most-viewed" name="isMostViewed"> Самый охватываемый пост
+          </label>
+      </div>
+     
   </form>
 </div>
+<div class="modal-footer">
+      <button type="button" id="save-add-article-btn">Сохранить</button>
+      <button type="button" id="close-modal">Отмена</button>
+  </div>
