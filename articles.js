@@ -30,7 +30,7 @@ export function updateArticle(updatedArticle) {
     );
     saveArticles();
     renderArticles();
-    import("./modules.js").then(modules => {
+     import("./modules.js").then(modules => {
         modules.renderStatistic();
     });
 }
@@ -62,9 +62,9 @@ export function renderArticles(filterType = 'all', searchText = '') {
     if (filterType !== 'all') {
         filteredArticles = filteredArticles.filter(article => article.sentiment === filterType);
     }
-    if (filterType === 'inspection') {
-       filteredArticles = filteredArticles.filter(article => article.isInspection);
-    }
+     if (filterType === 'inspection') {
+        filteredArticles = filteredArticles.filter(article => article.isInspection);
+     }
 
     if (filteredArticles.length === 0) {
       positiveList.innerHTML = '<p>Статьи не найдены.</p>';
@@ -73,16 +73,17 @@ export function renderArticles(filterType = 'all', searchText = '') {
     }
 
 
-    filteredArticles.forEach(article => {
-        const articleElement = renderArticle(article);
-        if (article.sentiment === 'positive') {
+    filteredArticles.forEach((article, index) => {
+        const articleElement = renderArticle(article, index + 1);
+         if (article.sentiment === 'positive') {
              positiveList.appendChild(articleElement);
         } else if (article.sentiment === 'negative') {
             negativeList.appendChild(articleElement);
-        } else {
-            positiveList.appendChild(articleElement);
-        }
+         } else {
+             positiveList.appendChild(articleElement);
+         }
     });
+
     positiveList.addEventListener('click', function(event) {
         if (event.target.classList.contains('delete-article-btn')) {
             const articleId = parseInt(event.target.dataset.id, 10);
@@ -93,11 +94,11 @@ export function renderArticles(filterType = 'all', searchText = '') {
             createEditArticleModal(articleId);
         }
         if (event.target.classList.contains('copy-article-btn')) {
-             const articleId = parseInt(event.target.dataset.id, 10);
+            const articleId = parseInt(event.target.dataset.id, 10);
             copyArticleToClipboard(articleId);
         }
     });
-       negativeList.addEventListener('click', function(event) {
+      negativeList.addEventListener('click', function(event) {
         if (event.target.classList.contains('delete-article-btn')) {
             const articleId = parseInt(event.target.dataset.id, 10);
             deleteArticle(articleId);
@@ -106,14 +107,14 @@ export function renderArticles(filterType = 'all', searchText = '') {
             const articleId = parseInt(event.target.dataset.id, 10);
             createEditArticleModal(articleId);
         }
-           if (event.target.classList.contains('copy-article-btn')) {
+        if (event.target.classList.contains('copy-article-btn')) {
             const articleId = parseInt(event.target.dataset.id, 10);
-               copyArticleToClipboard(articleId);
-           }
+            copyArticleToClipboard(articleId);
+        }
     });
 }
 
-function renderArticle(article) {
+function renderArticle(article, index) {
     console.log("renderArticle called for:", article);
 
     const articleElement = document.createElement('div');
@@ -121,65 +122,64 @@ function renderArticle(article) {
 
    const isMostViewedClass = article.isMostViewed ? 'most-viewed' : '';
    const isInspectionClass = article.isInspection ? 'inspection-post' : '';
-   if (isMostViewedClass) {
-       articleElement.classList.add(isMostViewedClass);
+    if (isMostViewedClass) {
+        articleElement.classList.add(isMostViewedClass);
     }
-    if (isInspectionClass) {
-       articleElement.classList.add(isInspectionClass);
-    }
+     if (isInspectionClass) {
+         articleElement.classList.add(isInspectionClass);
+     }
     articleElement.draggable = true;
     articleElement.dataset.id = article.id;
 
 
-    let socialHTML = '';
+   let previewHeader = `${index}) `;
+
+
     if (article.type === 'social' && article.social !== 'none') {
-        socialHTML = `<span>Соц.сеть - ${article.social}</span>`;
+       previewHeader += `${article.social} - `;
+    }
+
+     previewHeader += `${article.source}`;
+    if (article.type === 'social' && article.views) {
+        previewHeader += ` (${article.views})`;
     }
 
 
-     let viewsHTML = '';
-    if(article.type === 'social' && article.views) {
-        viewsHTML = `<span>(${article.views})</span>`;
-    }
+   const formattedDate = new Date(article.date).toLocaleDateString('ru-RU');
 
 
-    let addressesHTML = '';
+    let additionalInfo = '';
+
+
     if (article.addresses && article.addresses.length > 0) {
-        addressesHTML = `<p><strong>Адреса:</strong> ${article.addresses.join(', ')}</p>`;
+        additionalInfo += `<p>Адрес: ${article.addresses.join(', ')}</p>`;
     }
 
-    let speakerHTML = '';
     if (article.speaker && article.speaker.length > 0) {
-        speakerHTML = `<p><strong>Спикеры:</strong> ${article.speaker.join(', ')}</p>`;
+         additionalInfo += `<p>Спикер: ${article.speaker.join(', ')}</p>`;
     }
-
-    const startTimeHTML = article.startTime ? `<p><strong>Начало с:</strong> ${article.startTime}</p>` : '';
-
-
-
-   const urlHTML = article.url ? `<p>Ссылка: <a href="${article.url}" target="_blank">${article.url}</a></p>` : '';
-
+   if(article.startTime) {
+         additionalInfo += `<p>Начало видео: ${article.startTime}</p>`;
+     }
 
     articleElement.innerHTML = `
-        ${socialHTML} <span>Источник: ${article.source}</span> ${viewsHTML}
-        <p>Дата: ${article.date}</p>
-        <h3>${article.title}</h3>
+       <p>${previewHeader}</p>
+        <p>${formattedDate}</p>
         <p>${article.text.length > 500 ? article.text.substring(0, 500) + '...' : article.text}</p>
-       ${addressesHTML}
-       ${speakerHTML}
-        ${startTimeHTML}
-       ${urlHTML}
-        <div class="article-actions">
-        <button class="copy-article-btn" data-id="${article.id}">Копировать</button>
+         ${additionalInfo}
+       <p>Ссылка: <a href="${article.url}" target="_blank">${article.url}</a></p>
+
+       <div class="article-actions">
+       <button class="copy-article-btn" data-id="${article.id}">Копировать</button>
             <button class="edit-article-btn" data-id="${article.id}">Редактировать</button>
-            <button class="delete-article-btn" data-id="${article.id}">Удалить</button>
-        </div>
+           <button class="delete-article-btn" data-id="${article.id}">Удалить</button>
+       </div>
     `;
 
     return articleElement;
 }
 
-function copyArticleToClipboard(articleId) {
+ function copyArticleToClipboard(articleId) {
     const article = articles.find(article => article.id === articleId);
     if (!article) {
         console.error(`Article with id ${articleId} not found`);
