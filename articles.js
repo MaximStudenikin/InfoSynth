@@ -19,13 +19,13 @@ export function deleteArticle(articleId) {
     articles = articles.filter(article => article.id !== articleId);
     saveArticles();
     renderArticles();
-    import("./modules.js").then(modules => {
+     import("./modules.js").then(modules => {
         modules.renderStatistic();
     });
 }
 
 export function updateArticle(updatedArticle) {
-     articles = articles.map(article =>
+    articles = articles.map(article =>
         article.id === updatedArticle.id ? updatedArticle : article
     );
     saveArticles();
@@ -63,7 +63,7 @@ export function renderArticles(filterType = 'all', searchText = '') {
         filteredArticles = filteredArticles.filter(article => article.sentiment === filterType);
     }
     if (filterType === 'inspection') {
-        filteredArticles = filteredArticles.filter(article => article.isInspection);
+       filteredArticles = filteredArticles.filter(article => article.isInspection);
     }
 
     if (filteredArticles.length === 0) {
@@ -90,12 +90,11 @@ export function renderArticles(filterType = 'all', searchText = '') {
         }
         if (event.target.classList.contains('edit-article-btn')) {
             const articleId = parseInt(event.target.dataset.id, 10);
-              console.log("edit button click, articleId:", articleId);
             createEditArticleModal(articleId);
         }
         if (event.target.classList.contains('copy-article-btn')) {
-            const articleId = parseInt(event.target.dataset.id, 10);
-             copyArticleToClipboard(articleId);
+             const articleId = parseInt(event.target.dataset.id, 10);
+            copyArticleToClipboard(articleId);
         }
     });
        negativeList.addEventListener('click', function(event) {
@@ -105,11 +104,10 @@ export function renderArticles(filterType = 'all', searchText = '') {
         }
         if (event.target.classList.contains('edit-article-btn')) {
             const articleId = parseInt(event.target.dataset.id, 10);
-            console.log("edit button click, articleId:", articleId);
             createEditArticleModal(articleId);
         }
            if (event.target.classList.contains('copy-article-btn')) {
-             const articleId = parseInt(event.target.dataset.id, 10);
+            const articleId = parseInt(event.target.dataset.id, 10);
                copyArticleToClipboard(articleId);
            }
     });
@@ -121,16 +119,29 @@ function renderArticle(article) {
     const articleElement = document.createElement('div');
     articleElement.classList.add('article-preview');
 
-    const isMostViewedClass = article.isMostViewed ? 'most-viewed' : '';
-    const isInspectionClass = article.isInspection ? 'inspection-post' : '';
-    if (isMostViewedClass) {
-        articleElement.classList.add(isMostViewedClass);
+   const isMostViewedClass = article.isMostViewed ? 'most-viewed' : '';
+   const isInspectionClass = article.isInspection ? 'inspection-post' : '';
+   if (isMostViewedClass) {
+       articleElement.classList.add(isMostViewedClass);
     }
     if (isInspectionClass) {
-        articleElement.classList.add(isInspectionClass);
+       articleElement.classList.add(isInspectionClass);
     }
     articleElement.draggable = true;
     articleElement.dataset.id = article.id;
+
+
+    let socialHTML = '';
+    if (article.type === 'social' && article.social !== 'none') {
+        socialHTML = `<span>Соц.сеть - ${article.social}</span>`;
+    }
+
+
+     let viewsHTML = '';
+    if(article.type === 'social' && article.views) {
+        viewsHTML = `<span>(${article.views})</span>`;
+    }
+
 
     let addressesHTML = '';
     if (article.addresses && article.addresses.length > 0) {
@@ -142,24 +153,25 @@ function renderArticle(article) {
         speakerHTML = `<p><strong>Спикеры:</strong> ${article.speaker.join(', ')}</p>`;
     }
 
-    const startTimeHTML = article.startTime ? `<p><strong>Начало видео:</strong> ${article.startTime}</p>` : '';
+    const startTimeHTML = article.startTime ? `<p><strong>Начало с:</strong> ${article.startTime}</p>` : '';
+
+
+
+   const urlHTML = article.url ? `<p>Ссылка: <a href="${article.url}" target="_blank">${article.url}</a></p>` : '';
 
 
     articleElement.innerHTML = `
-         <h3>${article.title}</h3>
-          <p><strong>Источник:</strong> ${article.source}</p>
-         <p><strong>Дата:</strong> ${article.date}</p>
-         <p><strong>Тональность:</strong> ${article.sentiment}</p>
-        ${article.type === 'social' && article.social !== 'none' ? `<p><strong>Социальная сеть:</strong> ${article.social}</p>` : ''}
-         ${article.views ? `<p><strong>Просмотры:</strong> ${article.views}</p>` : ''}
-         <p>${article.text.length > 500 ? article.text.substring(0, 500) + '...' : article.text}</p>
-        ${addressesHTML}
+        ${socialHTML} <span>Источник: ${article.source}</span> ${viewsHTML}
+        <p>Дата: ${article.date}</p>
+        <h3>${article.title}</h3>
+        <p>${article.text.length > 500 ? article.text.substring(0, 500) + '...' : article.text}</p>
+       ${addressesHTML}
        ${speakerHTML}
-         ${startTimeHTML}
-        ${article.url ? `<p><strong>Ссылка:</strong> <a href="${article.url}" target="_blank">Открыть</a></p>` : ''}
+        ${startTimeHTML}
+       ${urlHTML}
         <div class="article-actions">
         <button class="copy-article-btn" data-id="${article.id}">Копировать</button>
-             <button class="edit-article-btn" data-id="${article.id}">Редактировать</button>
+            <button class="edit-article-btn" data-id="${article.id}">Редактировать</button>
             <button class="delete-article-btn" data-id="${article.id}">Удалить</button>
         </div>
     `;

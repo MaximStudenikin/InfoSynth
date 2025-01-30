@@ -1,4 +1,5 @@
-/* articles.css */
+/* styles.css */
+
 .article-actions {
   display: flex;
   gap: 5px;
@@ -8,7 +9,7 @@
   display: flex;
   justify-content: space-around;
   width: 100%;
- gap: 20px;
+  gap: 20px;
 }
 
 .article-list-container {
@@ -17,12 +18,12 @@
  border: 1px solid #ddd;
  border-radius: 4px;
  background-color: #f9f9f9;
- min-height: 300px;
+  min-height: 300px;
 }
 
 .article-list-container h3 {
    text-align: center;
-  margin-bottom: 10px;
+   margin-bottom: 10px;
 }
 
 #article-list, #positive-list, #negative-list {
@@ -31,23 +32,33 @@
   min-height: 100px;
 }
 
-.article-item {
- margin: 10px 0;
- padding: 10px;
- background: #fff;
- border-radius: 4px;
-  border: 1px solid #eee;
-    display: flex;
- flex-direction: column;
- gap: 5px;
-    position: relative;
+
+.article-preview {
+  margin: 10px 0;
+    padding: 10px;
+    background: #fff;
+    border-radius: 4px;
+     border: 1px solid #eee;
+       display: flex;
+     flex-direction: column;
+  gap: 5px;
+      position: relative;
 }
 
-.article-item.most-viewed-item {
-  border-left: 4px solid #007bff;
+.article-preview span {
+  font-size: 0.9em;
+  color: #777;
+   margin-right: 5px;
 }
 
-.article-item h1, .article-item h3, .article-item p {
- margin: 5px 0;
- line-height: 1.4;
+
+.article-preview h3 {
+  margin: 5px 0;
+  line-height: 1.4;
+     font-size: 1.2em;
+     font-weight: bold;
+}
+.article-preview p {
+    margin: 5px 0;
+    line-height: 1.4;
 }
